@@ -6,30 +6,48 @@ using System.Threading.Tasks;
 
 namespace ProjektKCK
 {
-    class Program
+    //public User us;
+    public class Program
     {
-        static int Menu(string[] inArray)
+        public User us = new User();
+        static void Main(string[] args)
         {
-            for (int i = 0; i < inArray.Length; i++)
+            
+            //Console.BackgroundColor = ConsoleColor.White;
+            Console.WriteLine("Password Masking Console Application");
+            Console.WriteLine("------------------------------------");
+            Console.Write("Login: ");
+            
+            string username = Console.ReadLine();
+            string password = "";
+            Console.Write("Hasło: ");
+            ConsoleKeyInfo keyInfo;
+
+            do
             {
-                if (i == selectedItem)
-                {//This section is what highlights the selected item
-                    Console.BackgroundColor = ConsoleColor.Gray;
-                    Console.ForegroundColor = ConsoleColor.Black;
-                    Console.WriteLine("-" + inArray[i]);
-                    Console.ResetColor();
+                keyInfo = Console.ReadKey(true);
+                // Skip if Backspace or Enter is Pressed
+                if (keyInfo.Key != ConsoleKey.Backspace && keyInfo.Key != ConsoleKey.Enter)
+                {
+                    password += keyInfo.KeyChar;
+                    Console.Write("*");
                 }
                 else
-                {//this section is what prints unselected items
-                    Console.WriteLine("-" + inArray[i]);
+                {
+                    if (keyInfo.Key == ConsoleKey.Backspace && password.Length > 0)
+                    {
+                        // Remove last charcter if Backspace is Pressed
+                        password = password.Substring(0, (password.Length - 1));
+                        Console.Write("\b \b");
+                    }
                 }
             }
-
-            bottomOffset = Console.CursorTop;
-        }
-
-            static void Main(string[] args)
-        {
+            // Stops Getting Password Once Enter is Pressed
+            while (keyInfo.Key != ConsoleKey.Enter);
+            Console.WriteLine();
+            Console.WriteLine("---------------------------");
+            Console.WriteLine("Welcome " + username + ",");
+            Console.WriteLine("Your Password is : " + password);
         }
     }
 }
