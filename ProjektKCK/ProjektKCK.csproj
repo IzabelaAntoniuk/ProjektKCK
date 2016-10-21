@@ -58,10 +58,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Logowanie.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rejestracja.cs" />
     <Compile Include="User.cs" />
   </ItemGroup>
   <ItemGroup>

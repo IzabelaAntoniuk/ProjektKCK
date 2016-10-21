@@ -13,8 +13,8 @@ namespace ProjektKCK
         static void Main(string[] args)
         {
             User us = new ProjektKCK.User();
-            Logowanie log = new Logowanie();
-            Rejestracja rejestr = new Rejestracja();
+            
+           
             Console.Write("Zaloguj sie na konto \n");
             Console.WriteLine("Nie masz konta? Zarejestruj sie!");
             int z = Convert.ToInt32(Console.ReadLine());
@@ -23,10 +23,10 @@ namespace ProjektKCK
             {
                 case 1:
                     
-                    log.zalogujProfil();
+                    us.zalogujProfil();
                     break;
                 case 2:
-                    rejestr.zarejestrujProfil();
+                    us.zarejestrujProfil();
                     break;
             }
             Console.ReadKey(true);
