@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ProjektKCK
 {
@@ -16,50 +19,39 @@ namespace ProjektKCK
         public int rok { get; set; }
         public int miesiac { get; set; }
         public string waga { get; set; }
-        public float waga2 { get; set; }
-        public float wzrost { get; set; }
-        public float aktywnosc { get; set; }
-
+        public string wzrost { get; set; }
+        public string aktywnosc { get; set; }
+        public string plec { get; set; }
+        public File file;
         public User()
         {
         }
         public void zarejestrujProfil()
         {
             User us = new User();
+            List<User> profileList = new List<User>();
+            File newFile=new File();
+            file = newFile;
+            
+            //List<User> profileList;
             Console.WriteLine("Rejestracja nowego użytkownika");
             Console.WriteLine("------------------------------------");
 
             try
             {
-                Console.Write("Waga:");
-                // us.waga = Convert.ToInt32(Console.ReadLine());
-                us.waga = Console.ReadLine();
-                us.waga2 = float.Parse(waga);
-                if (us.waga.Length <= 0 )
-                {
-                    do
-                    {
-
-                        Console.WriteLine("Pole wymagane");
-                        Console.Write("Waga: ");
-                        //us.waga = Convert.ToString(Console.ReadLine());
-                    } while (us.waga.Length <= 0);
-                }
-
                 Console.Write("Imie:");
-                us.imie = Console.ReadLine();
+                us.imie = Console.ReadLine();              
                 if (us.imie.Length <= 0)
                 {
                     do
                     {
-
                         Console.WriteLine("Pole wymagane");
                         Console.Write("Imie: ");
                         us.imie = Console.ReadLine();
                     } while (us.imie.Length <= 0);
                 }
 
-                Console.Write("Nazwisko:");
+                /*Console.Write("Nazwisko:");
                 us.nazwisko = Console.ReadLine();
                 if (us.nazwisko.Length <= 0)
                 {
@@ -71,7 +63,19 @@ namespace ProjektKCK
                     } while (us.nazwisko.Length <= 0);
                 }
 
-
+                Console.WriteLine("Płeć:");
+                Console.WriteLine("1- kobieta\n2- mężczyzna");
+                us.plec = Console.ReadLine();
+                if (us.plec.Length <= 0 || int.Parse(us.plec) <= 0)
+                {
+                    do
+                    {
+                        Console.WriteLine("Pole wymagane. Wybierz płęć");
+                        Console.WriteLine("Płeć:");
+                        Console.WriteLine("1- kobieta\n2- mężczyzna");
+                        us.plec = Console.ReadLine();
+                    } while (us.plec.Length <= 0 || int.Parse(us.plec) <= 0);
+                }
                 Console.Write("Hasło: ");
                 us.haslo = "";
                 ConsoleKeyInfo keyInfo;
@@ -106,7 +110,6 @@ namespace ProjektKCK
                         do
                         {
                             keyInfo = Console.ReadKey(true);
-                            // Skip if Backspace or Enter is Pressed
                             if (keyInfo.Key != ConsoleKey.Backspace && keyInfo.Key != ConsoleKey.Enter)
                             {
                                 us.haslo += keyInfo.KeyChar;
@@ -116,13 +119,11 @@ namespace ProjektKCK
                             {
                                 if (keyInfo.Key == ConsoleKey.Backspace && us.haslo.Length > 0)
                                 {
-                                    // Remove last charcter if Backspace is Pressed
                                     us.haslo = us.haslo.Substring(0, (us.haslo.Length - 1));
                                     Console.Write("\b \b");
                                 }
                             }
                         }
-                        // Stops Getting Password Once Enter is Pressed
                         while (keyInfo.Key != ConsoleKey.Enter);
                     } while (us.haslo.Length <= 0);
                 }
@@ -132,7 +133,6 @@ namespace ProjektKCK
                 {
                     do
                     {
-
                         Console.WriteLine("Pole wymagane");
                         Console.Write("Login: ");
                         us.login = Console.ReadLine();
@@ -140,9 +140,62 @@ namespace ProjektKCK
                 }
 
                 //Console.Write("Data urodzenia: to trzeba rozkminic");
+                Console.Write("Waga (kg):");
+                us.waga = Console.ReadLine();
+                if (us.waga.Length <= 0 || float.Parse(us.waga) <= 0)
+                {
+                    do
+                    {
+                        Console.WriteLine("Pole wymagane. Wprowadź właściwą wagę.");
+                        Console.Write("Waga (kg): ");
+                        us.waga = Console.ReadLine();
+                    } while (us.waga.Length <= 0 || float.Parse(us.waga) <= 0);
+                }
 
+                Console.Write("Wzrost (cm):");
+                us.wzrost = Console.ReadLine();
+                if (us.wzrost.Length <= 0 || float.Parse(us.wzrost) <= 0)
+                {
+                    do
+                    {
+                        Console.WriteLine("Pole wymagane. Wprowadź właściwy wzrost.");
+                        Console.Write("Wzrost (cm): ");
+                        us.wzrost = Console.ReadLine();
+                    } while (us.wzrost.Length <= 0 || float.Parse(us.wzrost) <= 0);
+                }
+
+                Console.WriteLine("Aktywność fizyczna:");
+                Console.WriteLine("1- znikoma\n2- bardzo mala\n3- umiarkowana\n4- duża\n5- bardzo duża");
+                us.aktywnosc = Console.ReadLine();
+                if (us.aktywnosc.Length <= 0 || int.Parse(us.aktywnosc) <= 0)
+                {
+                    do
+                    {
+                        Console.WriteLine("Pole wymagane. Wybierz aktywność");
+                        Console.WriteLine("Aktywność fizyczna:");
+                        Console.WriteLine("1- znikoma\n2- bardzo mala\n3- umiarkowana\n4- duża\n5- bardzo duża");
+                        us.aktywnosc = Console.ReadLine();
+                    } while (us.aktywnosc.Length <= 0 || int.Parse(us.aktywnosc) <= 0);
+                }*/
                 
+                //newFile.zapisywaniePlikuProfile(profileList);
+                using (StreamWriter sr = new StreamWriter("Profile.txt"))
+                {
+                 
+                    /*sr.Write(us.imie);
+                    sr.Write(us.nazwisko);
+                    sr.Write(us.plec);
+                   sr.Write(us.haslo);
+                     sr.Write(us.login);
+                     sr.Write(us.waga);
+                     sr.Write(us.wzrost);
+                     sr.Write(us.aktywnosc);*/
+                    string savePName = us.imie + us.nazwisko+ us.plec+ us.haslo+ us.login+ us.waga+ us.wzrost+ us.aktywnosc;
+                    savePName = JsonConvert.SerializeObject(us);
+                    sr.WriteLine(savePName);
+                    sr.Close();
 
+                }
 
             }
             catch (FormatException)
@@ -153,13 +206,12 @@ namespace ProjektKCK
         }
         public void zalogujProfil()
         {
-
-
             try
             {
                 User us = new ProjektKCK.User();
                 Console.WriteLine("LOGOWANIE UŻYTKOWNIKA");
                 Console.WriteLine("------------------------------------");
+              
 
                 Console.Write("Login: ");
                 us.login = Console.ReadLine();
@@ -177,59 +229,66 @@ namespace ProjektKCK
                 Console.Write("Hasło: ");
                 us.haslo = "";
                 ConsoleKeyInfo keyInfo;
-                
+                do
+                {
+                    keyInfo = Console.ReadKey(true);
+                    // Skip if Backspace or Enter is Pressed
+                    if (keyInfo.Key != ConsoleKey.Backspace && keyInfo.Key != ConsoleKey.Enter)
+                    {
+                        us.haslo += keyInfo.KeyChar;
+                        Console.Write("*");
+                    }
+                    else
+                    {
+                        if (keyInfo.Key == ConsoleKey.Backspace && us.haslo.Length > 0)
+                        {
+                            // Remove last charcter if Backspace is Pressed
+                            us.haslo = us.haslo.Substring(0, (us.haslo.Length - 1));
+                            Console.Write("\b \b");
+                        }
+                    }
+                }
+                // Stops Getting Password Once Enter is Pressed
+                while (keyInfo.Key != ConsoleKey.Enter);
+
+                if (us.haslo.Length <= 0)
+                {
                     do
                     {
-                        keyInfo = Console.ReadKey(true);
-                        // Skip if Backspace or Enter is Pressed
-                        if (keyInfo.Key != ConsoleKey.Backspace && keyInfo.Key != ConsoleKey.Enter)
-                        {
-                            us.haslo += keyInfo.KeyChar;
-                            Console.Write("*");
-                        }
-                        else
-                        {
-                            if (keyInfo.Key == ConsoleKey.Backspace && us.haslo.Length > 0)
-                            {
-                                // Remove last charcter if Backspace is Pressed
-                                us.haslo = us.haslo.Substring(0, (us.haslo.Length - 1));
-                                Console.Write("\b \b");
-                            }
-                        }
-                    }
-                    // Stops Getting Password Once Enter is Pressed
-                    while (us.haslo.Length <= 0 && keyInfo.Key != ConsoleKey.Enter);
-
-                    if (us.haslo.Length <= 0)
-                    {
+                        Console.WriteLine("\nHaslo nieprawidlowe.");
+                        Console.Write("Hasło: ");
                         do
                         {
-                            Console.WriteLine("\nHaslo nieprawidlowe.");
-                            Console.Write("Hasło: ");
-                            do
+                            keyInfo = Console.ReadKey(true);
+                            if (keyInfo.Key != ConsoleKey.Backspace && keyInfo.Key != ConsoleKey.Enter)
                             {
-                                keyInfo = Console.ReadKey(true);
-                                // Skip if Backspace or Enter is Pressed
-                                if (keyInfo.Key != ConsoleKey.Backspace && keyInfo.Key != ConsoleKey.Enter)
+                                us.haslo += keyInfo.KeyChar;
+                                Console.Write("*");
+                            }
+                            else
+                            {
+                                if (keyInfo.Key == ConsoleKey.Backspace && us.haslo.Length > 0)
                                 {
-                                    us.haslo += keyInfo.KeyChar;
-                                    Console.Write("*\n");
-                                }
-                                else
-                                {
-                                    if (keyInfo.Key == ConsoleKey.Backspace && us.haslo.Length > 0)
-                                    {
-                                        // Remove last charcter if Backspace is Pressed
-                                        us.haslo = us.haslo.Substring(0, (us.haslo.Length - 1));
-                                        Console.Write("\b \b");
-                                    }
+                                    us.haslo = us.haslo.Substring(0, (us.haslo.Length - 1));
+                                    Console.Write("\b \b");
                                 }
                             }
-                            // Stops Getting Password Once Enter is Pressed
-                            while (keyInfo.Key != ConsoleKey.Enter);
-                        } while (us.haslo.Length <= 0);
-                    }
-                
+                        }
+                        while (keyInfo.Key != ConsoleKey.Enter);
+                    } while (us.haslo.Length <= 0);
+                }
+                string log, has;
+                using (StreamReader sr = new StreamReader("Profile.txt"))
+                {
+                     log = sr.ReadLine();
+                     has = sr.ReadLine();
+                }
+                if (us.login == log && us.haslo == has)
+                {
+                    Console.WriteLine("\nzalogowano jako lol");
+
+                }
+                else Console.WriteLine("Sprobuj jeszcze raz!");
                 
             }
             catch (FormatException)
