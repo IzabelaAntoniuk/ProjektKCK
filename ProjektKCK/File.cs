@@ -10,7 +10,7 @@ namespace ProjektKCK
 {
     public class File
     {
-        User us;
+        User us = new User();
         public File()
         {
 
