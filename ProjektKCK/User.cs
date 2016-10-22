@@ -22,7 +22,7 @@ namespace ProjektKCK
         public string wzrost { get; set; }
         public string aktywnosc { get; set; }
         public string plec { get; set; }
-        public Pliki file;
+        public File file;
         public User()
         {
         }
@@ -30,7 +30,7 @@ namespace ProjektKCK
         {
             User us = new User();
             List<User> profileList = new List<User>();
-            Pliki newFile=new Pliki();
+            File newFile=new File();
             file = newFile;
             
             //List<User> profileList;

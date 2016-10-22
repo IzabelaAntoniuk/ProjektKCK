@@ -18,7 +18,7 @@ namespace ProjektKCK
         static void Main(string[] args)
         {
             User us = new ProjektKCK.User();
-            Pliki file = new Pliki();
+            File file = new File();
             List<User> glownyProfile = new List<User>();
 
 

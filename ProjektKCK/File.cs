@@ -8,10 +8,10 @@ using Newtonsoft.Json;
 
 namespace ProjektKCK
 {
-    public class Pliki
+    public class File
     {
         
-        public Pliki()
+        public File()
         {
 
         }
