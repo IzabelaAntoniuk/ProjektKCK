@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ProjektKCK
 {
@@ -16,8 +18,8 @@ namespace ProjektKCK
         static void Main(string[] args)
         {
             User us = new ProjektKCK.User();
-            File file = new File();
-            //List<User> glownyProfile = new List<User>();
+            Pliki file = new Pliki();
+            List<User> glownyProfile = new List<User>();
 
 
         //file.wczytywaniePlikuProfile();
@@ -36,7 +38,6 @@ namespace ProjektKCK
                     //file.zapisywaniePlikuProfile(glownyProfile);
                     break;
                 case 3:
-                   // file.wczytywaniePlikuProfile();
                     break;
             }
             Console.ReadKey(true);

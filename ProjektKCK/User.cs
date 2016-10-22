@@ -22,7 +22,7 @@ namespace ProjektKCK
         public string wzrost { get; set; }
         public string aktywnosc { get; set; }
         public string plec { get; set; }
-        public File file;
+        public Pliki file;
         public User()
         {
         }
@@ -30,7 +30,7 @@ namespace ProjektKCK
         {
             User us = new User();
             List<User> profileList = new List<User>();
-            File newFile=new File();
+            Pliki newFile=new Pliki();
             file = newFile;
             
             //List<User> profileList;
@@ -178,26 +178,17 @@ namespace ProjektKCK
                     } while (us.aktywnosc.Length <= 0 || int.Parse(us.aktywnosc) <= 0);
                 }
 
-                //newFile.zapisywaniePlikuProfile(profileList);
+               // file.zapisywaniePlikuProfile(profileList);
                 using (StreamWriter sr = new StreamWriter("Profile.txt",true))
-                
-                {
 
-                    /*sr.Write(us.imie);
-                    sr.Write(us.nazwisko);
-                    sr.Write(us.plec);
-                   sr.Write(us.haslo);
-                     sr.Write(us.login);
-                     sr.Write(us.waga);
-                     sr.Write(us.wzrost);
-                     sr.Write(us.aktywnosc);*/
-                    string savePName = us.imie + us.nazwisko + us.plec + us.haslo + us.login + us.waga + us.wzrost + us.aktywnosc;
-                    savePName = JsonConvert.SerializeObject(us);
-                    sr.WriteLine(savePName);
-                    sr.Close();
+                 {
+                     string savePName = us.imie + us.nazwisko + us.plec + us.haslo + us.login + us.waga + us.wzrost + us.aktywnosc;
+                     savePName = JsonConvert.SerializeObject(us);
+                     sr.WriteLine(savePName);
+                     sr.Close();
 
-                }
-
+                 }
+               
             }
             catch (FormatException)
             {
@@ -210,6 +201,7 @@ namespace ProjektKCK
             try
             {
                 User us = new ProjektKCK.User();
+                List<User> profileList = new List<User>();
                 Console.WriteLine("LOGOWANIE UŻYTKOWNIKA");
                 Console.WriteLine("------------------------------------");
               
@@ -278,37 +270,36 @@ namespace ProjektKCK
                         while (keyInfo.Key != ConsoleKey.Enter);
                     } while (us.haslo.Length <= 0);
                 }
-                StreamReader loadFileUser = new StreamReader("Profile.txt");
-                
+
+               using (StreamReader loadFileUser = new StreamReader("Profile.txt"))
+                {
                     string line;
                     while ((line = loadFileUser.ReadLine()) != null)
                     {
                         User load = JsonConvert.DeserializeObject<User>(line);
-                    //Console.WriteLine("\ndodalem na liste i wczytalem z pliku");
-                    
-                        if (load.login== us.login && load.haslo== us.haslo)
+
+
+                        if (load.login == us.login && load.haslo == us.haslo)
                         {
-                            Console.WriteLine("\nZalogowano jako "+load.login);
-
+                            Console.WriteLine("\nZalogowano jako " + load.login);
                         }
-                        else Console.WriteLine("Sprobuj jeszcze raz!");
+                        else if (load.login != us.login && load.haslo == us.haslo)
+                        {
+                            Console.WriteLine("Nieprawidlowy login");
+                        }
+                        else if (load.login == us.login && load.haslo != us.haslo)
+                        {
+                            Console.WriteLine("Nieprawidlowe haslo");
+                        }
+                        else
+                        { Console.WriteLine("Login i haslo nieprawidlowe"); }
                     }
-
                     Console.WriteLine("zamykam plik");
                     loadFileUser.Close();
-                
-                /*string log, has;
-                using (StreamReader sr = new StreamReader("Profile.txt"))
-                {
-                     log = sr.ReadLine();
-                     has = sr.ReadLine();
                 }
-                if (us.login == log && us.haslo == has)
-                {
-                    Console.WriteLine("\nzalogowano jako lol");
+               
 
-                }
-                else Console.WriteLine("Sprobuj jeszcze raz!");*/
+
 
             }
             catch (FormatException)

@@ -8,10 +8,10 @@ using Newtonsoft.Json;
 
 namespace ProjektKCK
 {
-    public class File
+    public class Pliki
     {
-        User us;
-        public File()
+        
+        public Pliki()
         {
 
         }
@@ -26,12 +26,12 @@ namespace ProjektKCK
                     User load = JsonConvert.DeserializeObject<User>(line);
                     //Console.WriteLine("\ndodalem na liste i wczytalem z pliku");
 
-                    if (us.login == load.login && us.haslo == load.haslo)
+                    /*if (us.login == load.login && us.haslo == load.haslo)
                     {
                         Console.WriteLine("\nZalogowano jako " + load.login);
 
                     }
-                    else Console.WriteLine("\nSprobuj jeszcze raz!");
+                    else Console.WriteLine("\nSprobuj jeszcze raz!");*/
                 }
                 Console.WriteLine("zamykam plik");
                 loadFileUser.Close();
@@ -39,7 +39,7 @@ namespace ProjektKCK
         }
         public void zapisywaniePlikuProfile(List<User> profileList)
         {
-            StreamWriter openFile = new StreamWriter("Profile.txt");
+            StreamWriter openFile = new StreamWriter("Profile.txt",true);
             if (profileList.Count > 0)
             {
                 foreach (User us in profileList)
