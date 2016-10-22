@@ -10,7 +10,7 @@ namespace ProjektKCK
 {
     public class File
     {
-        
+        User us = new User();
         public File()
         {
 
@@ -26,12 +26,12 @@ namespace ProjektKCK
                     User load = JsonConvert.DeserializeObject<User>(line);
                     //Console.WriteLine("\ndodalem na liste i wczytalem z pliku");
 
-                    /*if (us.login == load.login && us.haslo == load.haslo)
+                    if (us.login == load.login && us.haslo == load.haslo)
                     {
                         Console.WriteLine("\nZalogowano jako " + load.login);
 
                     }
-                    else Console.WriteLine("\nSprobuj jeszcze raz!");*/
+                    else Console.WriteLine("\nSprobuj jeszcze raz!");
                 }
                 Console.WriteLine("zamykam plik");
                 loadFileUser.Close();
@@ -39,7 +39,7 @@ namespace ProjektKCK
         }
         public void zapisywaniePlikuProfile(List<User> profileList)
         {
-            StreamWriter openFile = new StreamWriter("Profile.txt",true);
+            StreamWriter openFile = new StreamWriter("Profile.txt");
             if (profileList.Count > 0)
             {
                 foreach (User us in profileList)

@@ -23,9 +23,11 @@ namespace ProjektKCK
         public string aktywnosc { get; set; }
         public string plec { get; set; }
         public File file;
+
         public User()
         {
         }
+
         public void zarejestrujProfil()
         {
             User us = new User();
@@ -39,7 +41,7 @@ namespace ProjektKCK
 
             try
             {
-                Console.Write("Imie:");
+                Console.Write("Imie: ");
                 us.imie = Console.ReadLine();              
                 if (us.imie.Length <= 0)
                 {
@@ -51,7 +53,7 @@ namespace ProjektKCK
                     } while (us.imie.Length <= 0);
                 }
 
-                Console.Write("Nazwisko:");
+                Console.Write("Nazwisko: ");
                 us.nazwisko = Console.ReadLine();
                 if (us.nazwisko.Length <= 0)
                 {
@@ -63,14 +65,14 @@ namespace ProjektKCK
                     } while (us.nazwisko.Length <= 0);
                 }
 
-                Console.WriteLine("Płeć:");
+                Console.WriteLine("Płeć: ");
                 Console.WriteLine("1- kobieta\n2- mężczyzna");
                 us.plec = Console.ReadLine();
                 if (us.plec.Length <= 0 || int.Parse(us.plec) <= 0)
                 {
                     do
                     {
-                        Console.WriteLine("Pole wymagane. Wybierz płęć");
+                        Console.WriteLine("Pole wymagane. Wybierz płeć");
                         Console.WriteLine("Płeć:");
                         Console.WriteLine("1- kobieta\n2- mężczyzna");
                         us.plec = Console.ReadLine();
@@ -172,23 +174,32 @@ namespace ProjektKCK
                     do
                     {
                         Console.WriteLine("Pole wymagane. Wybierz aktywność");
-                        Console.WriteLine("Aktywność fizyczna:");
+                        Console.WriteLine("Aktywność fizyczna: ");
                         Console.WriteLine("1- znikoma\n2- bardzo mala\n3- umiarkowana\n4- duża\n5- bardzo duża");
                         us.aktywnosc = Console.ReadLine();
                     } while (us.aktywnosc.Length <= 0 || int.Parse(us.aktywnosc) <= 0);
                 }
 
-               // file.zapisywaniePlikuProfile(profileList);
+                //newFile.zapisywaniePlikuProfile(profileList);
                 using (StreamWriter sr = new StreamWriter("Profile.txt",true))
+                
+                {
 
-                 {
-                     string savePName = us.imie + us.nazwisko + us.plec + us.haslo + us.login + us.waga + us.wzrost + us.aktywnosc;
-                     savePName = JsonConvert.SerializeObject(us);
-                     sr.WriteLine(savePName);
-                     sr.Close();
+                    /*sr.Write(us.imie);
+                    sr.Write(us.nazwisko);
+                    sr.Write(us.plec);
+                   sr.Write(us.haslo);
+                     sr.Write(us.login);
+                     sr.Write(us.waga);
+                     sr.Write(us.wzrost);
+                     sr.Write(us.aktywnosc);*/
+                    string savePName = us.imie + us.nazwisko + us.plec + us.haslo + us.login + us.waga + us.wzrost + us.aktywnosc;
+                    savePName = JsonConvert.SerializeObject(us);
+                    sr.WriteLine(savePName);
+                    sr.Close();
 
-                 }
-               
+                }
+
             }
             catch (FormatException)
             {
@@ -201,7 +212,6 @@ namespace ProjektKCK
             try
             {
                 User us = new ProjektKCK.User();
-                List<User> profileList = new List<User>();
                 Console.WriteLine("LOGOWANIE UŻYTKOWNIKA");
                 Console.WriteLine("------------------------------------");
               
@@ -270,36 +280,37 @@ namespace ProjektKCK
                         while (keyInfo.Key != ConsoleKey.Enter);
                     } while (us.haslo.Length <= 0);
                 }
-
-               using (StreamReader loadFileUser = new StreamReader("Profile.txt"))
-                {
+                StreamReader loadFileUser = new StreamReader("Profile.txt");
+                
                     string line;
                     while ((line = loadFileUser.ReadLine()) != null)
                     {
                         User load = JsonConvert.DeserializeObject<User>(line);
-
-
+                    //Console.WriteLine("\ndodalem na liste i wczytalem z pliku");
+                    
                         if (load.login == us.login && load.haslo == us.haslo)
                         {
-                            Console.WriteLine("\nZalogowano jako " + load.login);
+                            Console.WriteLine("\nZalogowano jako "+load.login);
+                        break;
                         }
-                        else if (load.login != us.login && load.haslo == us.haslo)
-                        {
-                            Console.WriteLine("Nieprawidlowy login");
-                        }
-                        else if (load.login == us.login && load.haslo != us.haslo)
-                        {
-                            Console.WriteLine("Nieprawidlowe haslo");
-                        }
-                        else
-                        { Console.WriteLine("Login i haslo nieprawidlowe"); }
+                        //else Console.WriteLine("Sprobuj jeszcze raz!");
                     }
+                Console.ReadKey();
                     Console.WriteLine("zamykam plik");
                     loadFileUser.Close();
+                
+                /*string log, has;
+                using (StreamReader sr = new StreamReader("Profile.txt"))
+                {
+                     log = sr.ReadLine();
+                     has = sr.ReadLine();
                 }
-               
+                if (us.login == log && us.haslo == has)
+                {
+                    Console.WriteLine("\nzalogowano jako lol");
 
-
+                }
+                else Console.WriteLine("Sprobuj jeszcze raz!");*/
 
             }
             catch (FormatException)
