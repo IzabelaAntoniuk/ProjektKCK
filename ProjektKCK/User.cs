@@ -51,7 +51,7 @@ namespace ProjektKCK
                     } while (us.imie.Length <= 0);
                 }
 
-                /*Console.Write("Nazwisko:");
+                Console.Write("Nazwisko:");
                 us.nazwisko = Console.ReadLine();
                 if (us.nazwisko.Length <= 0)
                 {
@@ -176,12 +176,13 @@ namespace ProjektKCK
                         Console.WriteLine("1- znikoma\n2- bardzo mala\n3- umiarkowana\n4- duża\n5- bardzo duża");
                         us.aktywnosc = Console.ReadLine();
                     } while (us.aktywnosc.Length <= 0 || int.Parse(us.aktywnosc) <= 0);
-                }*/
-                
+                }
+
                 //newFile.zapisywaniePlikuProfile(profileList);
-                using (StreamWriter sr = new StreamWriter("Profile.txt"))
+                using (StreamWriter sr = new StreamWriter("Profile.txt",true))
+                
                 {
-                 
+
                     /*sr.Write(us.imie);
                     sr.Write(us.nazwisko);
                     sr.Write(us.plec);
@@ -190,7 +191,7 @@ namespace ProjektKCK
                      sr.Write(us.waga);
                      sr.Write(us.wzrost);
                      sr.Write(us.aktywnosc);*/
-                    string savePName = us.imie + us.nazwisko+ us.plec+ us.haslo+ us.login+ us.waga+ us.wzrost+ us.aktywnosc;
+                    string savePName = us.imie + us.nazwisko + us.plec + us.haslo + us.login + us.waga + us.wzrost + us.aktywnosc;
                     savePName = JsonConvert.SerializeObject(us);
                     sr.WriteLine(savePName);
                     sr.Close();
@@ -277,7 +278,26 @@ namespace ProjektKCK
                         while (keyInfo.Key != ConsoleKey.Enter);
                     } while (us.haslo.Length <= 0);
                 }
-                string log, has;
+                StreamReader loadFileUser = new StreamReader("Profile.txt");
+                
+                    string line;
+                    while ((line = loadFileUser.ReadLine()) != null)
+                    {
+                        User load = JsonConvert.DeserializeObject<User>(line);
+                    //Console.WriteLine("\ndodalem na liste i wczytalem z pliku");
+                    
+                        if (load.login== us.login && load.haslo== us.haslo)
+                        {
+                            Console.WriteLine("\nZalogowano jako "+load.login);
+
+                        }
+                        else Console.WriteLine("Sprobuj jeszcze raz!");
+                    }
+
+                    Console.WriteLine("zamykam plik");
+                    loadFileUser.Close();
+                
+                /*string log, has;
                 using (StreamReader sr = new StreamReader("Profile.txt"))
                 {
                      log = sr.ReadLine();
@@ -288,8 +308,8 @@ namespace ProjektKCK
                     Console.WriteLine("\nzalogowano jako lol");
 
                 }
-                else Console.WriteLine("Sprobuj jeszcze raz!");
-                
+                else Console.WriteLine("Sprobuj jeszcze raz!");*/
+
             }
             catch (FormatException)
             {

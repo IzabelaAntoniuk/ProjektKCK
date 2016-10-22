@@ -10,6 +10,7 @@ namespace ProjektKCK
 {
     public class File
     {
+        User us;
         public File()
         {
 
@@ -17,15 +18,24 @@ namespace ProjektKCK
 
         public void wczytywaniePlikuProfile()
         {
-            StreamReader loadFileUser = new StreamReader("Profile.txt");
-            string line;
-            while ((line = loadFileUser.ReadLine()) != null)
+            using (StreamReader loadFileUser = new StreamReader("Profile.txt"))
             {
-                User load = JsonConvert.DeserializeObject<User>(line);             
-                Console.WriteLine("dodalem na liste i wczytalem z pliku");
+                string line;
+                while ((line = loadFileUser.ReadLine()) != null)
+                {
+                    User load = JsonConvert.DeserializeObject<User>(line);
+                    //Console.WriteLine("\ndodalem na liste i wczytalem z pliku");
+
+                    if (us.login == load.login && us.haslo == load.haslo)
+                    {
+                        Console.WriteLine("\nZalogowano jako " + load.login);
+
+                    }
+                    else Console.WriteLine("\nSprobuj jeszcze raz!");
+                }
+                Console.WriteLine("zamykam plik");
+                loadFileUser.Close();
             }
-            Console.WriteLine("zamykam plik");
-            loadFileUser.Close();
         }
         public void zapisywaniePlikuProfile(List<User> profileList)
         {
