@@ -17,12 +17,12 @@ namespace ProjektKCK
         public List<User> glownyProfile = new List<User>();
         //public User us;
 
-        static int Menu(string[] inArray)
+        static int Menu(string[] inArray, int selectedItem)//bottomOffset)
         {
             bool loopComplete = false;
             int topOffset = Console.CursorTop;
             int bottomOffset = 0;
-            int selectedItem = 0;
+           // int selectedItem = 0;
             ConsoleKeyInfo kb;
 
             Console.CursorVisible = false;
@@ -144,7 +144,7 @@ namespace ProjektKCK
             Console.Clear();
         }
 
-        static string[] wypelnijMenu()
+        static string[] wypelnijMenuGlowne()
         {
             string[] tab = new string[3];
             tab[0] = "Zaloguj sie";
@@ -153,51 +153,150 @@ namespace ProjektKCK
             return tab;
         }
 
+        static string[] wypelnijProfil()
+        {
+            string[] tab = new string[9];
+            tab[0] = "Dodaj posiłek";
+            tab[1] = "Dodaj trening";
+            tab[2] = "Dodaj wagę";
+            tab[3] = "Obejrzyj posiłki";
+            tab[4] = "Obejrzyj treningi";
+            tab[5] = "Statystyki";
+            tab[5] = "Kalkulatory";
+            tab[6] = "Zobacz swój profil";
+            tab[7] = "Wyloguj";
+            tab[8] = "Zakończ";
+            return tab;
+        }
+
+        public static void ClearCurrentConsoleLine()
+        {
+            int currentLineCursor = Console.CursorTop;
+            Console.SetCursorPosition(0, Console.CursorTop);
+            Console.Write(new string(' ', Console.WindowWidth));
+            Console.SetCursorPosition(0, currentLineCursor);
+        }
+
+        public static void ClearLine(int lines)
+        {
+            for (int i = 1; i <= lines; i++)
+            {
+                Console.SetCursorPosition(0, Console.CursorTop);
+                Console.Write(new string(' ', Console.WindowWidth));
+                Console.SetCursorPosition(0, Console.CursorTop);
+                Console.CursorVisible = false;
+            }
+        }
+
+        static int Decyzja()
+        {
+            int dec = 0;
+            Console.WriteLine();
+            Console.WriteLine("Aby schować profil wciśnij dowolny klawisz...");
+            Console.WriteLine("Aby edytować profil wciśnij klawisz 'e'");
+            //Console.ReadKey();
+            ConsoleKeyInfo k;
+            k = Console.ReadKey(true);
+            if (k.Key != ConsoleKey.E)
+                dec = 1;
+            else if (k.Key == ConsoleKey.E)
+                dec = 2;
+            return dec;
+        }
+
         static void Main(string[] args)
         {
             Console.Title = "Projekt KCK";
             Console.WriteLine();
             Console.WriteLine("Proczę czekać, trwa ładowanie...");
-            Animation();
+           // Animation();
             
-            Console.SetCursorPosition(20, 0);
-            Console.WriteLine();
+            
 
-            Console.WriteAscii("WITAJ", Color.FromArgb(211, 126, 201));
-
-            string[] tab = wypelnijMenu();
+            string[] tabMenuGlowne = wypelnijMenuGlowne();
+            string[] tabMenuProfil = wypelnijProfil();
 
             User us = new ProjektKCK.User();
             File file = new File();
 
-            int selected = Menu(tab);
-
-            switch (selected)
-            {
-                case 0:
-                    Console.Clear();
-                    us.zalogujProfil();
-                    break;
-                case 1:
-                    Console.Clear();
-                    us.zarejestrujProfil();
-                   // file.zapisywaniePlikuProfile(glownyProfile);
-                    break;
-                case 3:
-                    // file.wczytywaniePlikuProfile();
-                    break;
-            }
-          //  Console.ReadKey(true);
-
-
-
-            //List<User> glownyProfile = new List<User>();
-
-
-            //file.wczytywaniePlikuProfile();
-
             
 
+            while (true)
+            {
+                Console.SetCursorPosition(20, 0);
+                Console.WriteLine();
+
+                Console.WriteAscii("WITAJ", Color.FromArgb(211, 126, 201));
+
+                int selected = Menu(tabMenuGlowne, 0);
+                switch (selected)
+                {
+                    case 0:
+                        Console.Clear();
+                        us.zalogujProfil();
+
+                        while (true)
+                        {
+                            Console.Clear();
+                            Console.WriteLine();
+                            us.wyswietlPasek();
+                            tabMenuProfil = wypelnijProfil();
+                            Console.SetCursorPosition(0, 3);
+                            selected = Menu(tabMenuProfil, selected);
+                            switch (selected)
+                            {
+                                case 0:
+                                    break;
+                                case 1:
+                                    break;
+                                case 2:
+                                    Console.SetCursorPosition(15, 5);
+                                    us.waga = Console.ReadLine();
+                                    break;
+                                case 3:
+                                    break;
+                                case 4:
+                                    break;
+                                case 5:
+                                    break;
+                                case 6:
+                                    Console.SetCursorPosition(0, 15);
+                                    us.wyswietlProfil();
+                                    int dezycja = Decyzja();
+                                    if (dezycja == 1)
+                                    {
+                                        Console.SetCursorPosition(0, 15);
+                                        ClearLine(9);
+                                    }
+                                    else if (dezycja == 2)
+                                    {
+                                        Console.SetCursorPosition(10, 15);
+                                        us.edytujProfil();
+                                    }
+                                    //Console.ReadKey();
+                                    break;
+                                case 7:
+                                    Console.Clear();
+                                    break;
+                                case 8:
+                                    return;
+                                default:
+                                    break;
+                            }
+                            if(selected == 7)
+                                break;
+                        }
+                        break;
+                    case 1:
+                        Console.Clear();
+                        us.zarejestrujProfil();
+                        // file.zapisywaniePlikuProfile(glownyProfile);
+                        break;
+                    case 2:
+                        // file.wczytywaniePlikuProfile();
+                        return;
+                }
+            }
         }
     }
 }
