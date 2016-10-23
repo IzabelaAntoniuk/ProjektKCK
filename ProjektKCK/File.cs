@@ -8,48 +8,58 @@ using Newtonsoft.Json;
 
 namespace ProjektKCK
 {
-    public class File
+    public class File : User
     {
-        User us = new User();
-        public File()
+        public File(string login, string password)
         {
-
+            this.login = login;
+            this.haslo = password;
         }
 
-        public void wczytywaniePlikuProfile()
+        public User wczytywaniePlikuProfile()
         {
+            User us = new User();
             using (StreamReader loadFileUser = new StreamReader("Profile.txt"))
             {
                 string line;
                 while ((line = loadFileUser.ReadLine()) != null)
                 {
                     User load = JsonConvert.DeserializeObject<User>(line);
-                    //Console.WriteLine("\ndodalem na liste i wczytalem z pliku");
 
-                    if (us.login == load.login && us.haslo == load.haslo)
+                    if (load.login == login && load.haslo == haslo)
                     {
-                        Console.WriteLine("\nZalogowano jako " + load.login);
-
+                        
+                        us.imie = load.imie;
+                        us.nazwisko = load.nazwisko;
+                        us.waga = load.waga;
+                        us.wzrost = load.wzrost;
+                        us.dataUr = load.dataUr;
+                        us.aktywnosc = load.aktywnosc;
+                        us.login = load.login;
+                        us.haslo = load.haslo;
+                        break;
                     }
-                    else Console.WriteLine("\nSprobuj jeszcze raz!");
                 }
-                Console.WriteLine("zamykam plik");
                 loadFileUser.Close();
             }
+            return us;
         }
+
         public void zapisywaniePlikuProfile(List<User> profileList)
         {
-            StreamWriter openFile = new StreamWriter("Profile.txt");
-            if (profileList.Count > 0)
+            using (StreamWriter openFile = new StreamWriter("Profile.txt", true))
             {
-                foreach (User us in profileList)
+                if (profileList.Count > 0)
                 {
-                    string savePName = us.imie + us.nazwisko + us.plec + us.haslo + us.login + us.waga + us.wzrost + us.aktywnosc;
-                    savePName = JsonConvert.SerializeObject(us);
-                    openFile.WriteLine(savePName);
+                    foreach (User us in profileList)
+                    {
+                        string savePName = us.imie + us.nazwisko + us.plec + us.haslo + us.login + us.waga + us.wzrost + us.aktywnosc;
+                        savePName = JsonConvert.SerializeObject(us);
+                        openFile.WriteLine(savePName);
+                    }
                 }
+                openFile.Close();
             }
-            openFile.Close();
         }
     }
 }

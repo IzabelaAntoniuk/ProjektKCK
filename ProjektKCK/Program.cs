@@ -155,7 +155,7 @@ namespace ProjektKCK
 
         static string[] wypelnijProfil()
         {
-            string[] tab = new string[9];
+            string[] tab = new string[10];
             tab[0] = "Dodaj posiłek";
             tab[1] = "Dodaj trening";
             tab[2] = "Dodaj wagę";
@@ -164,8 +164,9 @@ namespace ProjektKCK
             tab[5] = "Statystyki";
             tab[5] = "Kalkulatory";
             tab[6] = "Zobacz swój profil";
-            tab[7] = "Wyloguj";
-            tab[8] = "Zakończ";
+            tab[7] = "Ustawienia";
+            tab[8] = "Wyloguj";
+            tab[9] = "Zakończ";
             return tab;
         }
 
@@ -177,24 +178,23 @@ namespace ProjektKCK
             Console.SetCursorPosition(0, currentLineCursor);
         }
 
-        public static void ClearLine(int lines)
+        public static void ClearLine(int x, int y, int lines)
         {
-            for (int i = 1; i <= lines; i++)
+            for (int i = y; i <= lines; i++)
             {
-                Console.SetCursorPosition(0, Console.CursorTop);
+                Console.SetCursorPosition(x, i);
                 Console.Write(new string(' ', Console.WindowWidth));
-                Console.SetCursorPosition(0, Console.CursorTop);
+                Console.SetCursorPosition(x, i);
                 Console.CursorVisible = false;
             }
         }
 
-        static int Decyzja()
+        static int Decyzja(int x, int y)
         {
             int dec = 0;
-            Console.WriteLine();
-            Console.WriteLine("Aby schować profil wciśnij dowolny klawisz...");
-            Console.WriteLine("Aby edytować profil wciśnij klawisz 'e'");
-            //Console.ReadKey();
+            Console.SetCursorPosition(x, y);
+            Console.WriteLine("Wciśnij 'e' aby edytować");
+            Console.WriteLine("lub dowolny klawisz aby zakończyć...");
             ConsoleKeyInfo k;
             k = Console.ReadKey(true);
             if (k.Key != ConsoleKey.E)
@@ -217,7 +217,7 @@ namespace ProjektKCK
             string[] tabMenuProfil = wypelnijProfil();
 
             User us = new ProjektKCK.User();
-            File file = new File();
+            //File file = new File();
 
             
 
@@ -227,6 +227,7 @@ namespace ProjektKCK
                 Console.WriteLine();
 
                 Console.WriteAscii("WITAJ", Color.FromArgb(211, 126, 201));
+                
 
                 int selected = Menu(tabMenuGlowne, 0);
                 switch (selected)
@@ -234,7 +235,9 @@ namespace ProjektKCK
                     case 0:
                         Console.Clear();
                         us.zalogujProfil();
-
+                        Console.SetCursorPosition(0, 8);
+                        Console.WriteLine("\nZalogowano jako " + us.login);
+                        Console.ReadKey();
                         while (true)
                         {
                             Console.Clear();
@@ -250,40 +253,55 @@ namespace ProjektKCK
                                 case 1:
                                     break;
                                 case 2:
-                                    Console.SetCursorPosition(15, 5);
-                                    us.waga = Console.ReadLine();
+                                    us.edytujWage();
                                     break;
                                 case 3:
                                     break;
                                 case 4:
                                     break;
                                 case 5:
+                                    Console.Clear();
+                                    Console.Write("HEJ");
+                                    Console.ReadKey();
                                     break;
                                 case 6:
-                                    Console.SetCursorPosition(0, 15);
+                                    
                                     us.wyswietlProfil();
-                                    int dezycja = Decyzja();
+                                    int dezycja = Decyzja(0, 25);
                                     if (dezycja == 1)
                                     {
-                                        Console.SetCursorPosition(0, 15);
-                                        ClearLine(9);
+                                        break;
                                     }
                                     else if (dezycja == 2)
                                     {
-                                        Console.SetCursorPosition(10, 15);
+                                        ClearLine(0, 24, 27);
+                                        Console.SetCursorPosition(10, 17);
                                         us.edytujProfil();
                                     }
-                                    //Console.ReadKey();
                                     break;
                                 case 7:
-                                    Console.Clear();
+                                    us.wyswietlLoginHaslo();
+                                    dezycja = Decyzja(0, 21);
+                                    if (dezycja == 1)
+                                    {
+                                        break;
+                                    }
+                                    else if (dezycja == 2)
+                                    {
+                                        ClearLine(0, 21, 25);
+                                        Console.SetCursorPosition(10, 17);
+                                        us.edytujLoginHaslo();
+                                    }
                                     break;
                                 case 8:
+                                    Console.Clear();
+                                    break;
+                                case 9:
                                     return;
                                 default:
                                     break;
                             }
-                            if(selected == 7)
+                            if(selected == 8)
                                 break;
                         }
                         break;
