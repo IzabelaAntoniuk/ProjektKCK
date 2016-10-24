@@ -8,15 +8,36 @@ using Newtonsoft.Json;
 
 namespace ProjektKCK
 {
-    public class File : User
+    public class File
     {
-        public File(string login, string password)
+        List<User> profile = new List<User>();
+
+        public File()
         {
-            this.login = login;
-            this.haslo = password;
         }
 
-        public User wczytywaniePlikuProfile()
+        public List<User> listaProfili()
+        {
+            using (StreamReader loadFileUser = new StreamReader("Profile.txt"))
+            {
+                string line;
+                while ((line = loadFileUser.ReadLine()) != null)
+                {
+                    User us = JsonConvert.DeserializeObject<User>(line);
+                    profile.Add(us);
+                }
+                loadFileUser.Close();
+                Console.SetCursorPosition(0, 20);
+                
+            }
+            foreach (User us in profile)
+            {
+                Console.WriteLine(us.imie);
+            }
+            return profile;
+        }
+
+        public User wczytywaniePlikuProfile(string log, string has)
         {
             User us = new User();
             using (StreamReader loadFileUser = new StreamReader("Profile.txt"))
@@ -26,7 +47,7 @@ namespace ProjektKCK
                 {
                     User load = JsonConvert.DeserializeObject<User>(line);
 
-                    if (load.login == login && load.haslo == haslo)
+                    if (load.login == log && load.haslo == has)
                     {
                         
                         us.imie = load.imie;
@@ -48,6 +69,23 @@ namespace ProjektKCK
         public void zapisywaniePlikuProfile(List<User> profileList)
         {
             using (StreamWriter openFile = new StreamWriter("Profile.txt", true))
+            {
+                if (profileList.Count > 0)
+                {
+                    foreach (User us in profileList)
+                    {
+                        string savePName = us.imie + us.nazwisko + us.plec + us.haslo + us.login + us.waga + us.wzrost + us.aktywnosc;
+                        savePName = JsonConvert.SerializeObject(us);
+                        openFile.WriteLine(savePName);
+                    }
+                }
+                openFile.Close();
+            }
+        }
+
+        public void zapisywaniePliku(List<User> profileList)
+        {
+            using (StreamWriter openFile = new StreamWriter("Profile.txt"))
             {
                 if (profileList.Count > 0)
                 {

@@ -24,19 +24,29 @@ namespace ProjektKCK
         public string wzrost { get; set; }
         public string aktywnosc { get; set; }
         public string plec { get; set; }
-        public File file;
+        File file = new File();
         public int dziennie { get; set; }
         public int zuzyte { get; set; }
         List<User> profileList = new List<User>();
 
         public User()
         {
+            
+        }
+
+        public void uzupelnijListe()
+        {
+            profileList = file.listaProfili();
+        }
+
+        public void zapiszListe()
+        {
+            file.zapisywaniePliku(profileList);
         }
 
         public void zarejestrujProfil()
         {
             User us = new User();
-            
 
             Console.CursorVisible = false;
             Console.SetCursorPosition(0, 0);
@@ -190,9 +200,11 @@ namespace ProjektKCK
                         us.aktywnosc = Console.ReadLine();
                     } while (us.aktywnosc.Length <= 0 || int.Parse(us.aktywnosc) <= 0);
                 }
+                
                 profileList.Add(us);
-                File load = new File(us.login, us.haslo);
-                load.zapisywaniePlikuProfile(profileList);
+                //File load = new File();
+                //file.zapisywaniePlikuProfile(profileList);
+                zapiszListe();
             }
             catch (FormatException)
             {
@@ -285,18 +297,25 @@ namespace ProjektKCK
                         while (keyInfo.Key != ConsoleKey.Enter);
                     } while (pass.Length <= 0);
                 }
-                File load = new File(log, pass);
-                Console.SetCursorPosition(0, 16);
-                us = load.wczytywaniePlikuProfile();
 
-                this.imie = us.imie;
-                this.nazwisko = us.nazwisko;
-                this.waga = us.waga;
-                this.wzrost = us.wzrost;
-                this.dataUr = us.dataUr;
-                this.aktywnosc = us.aktywnosc;
-                this.login = us.login;
-                this.haslo = us.haslo;
+               // File load = new File();
+                Console.SetCursorPosition(0, 16);
+                // us = load.wczytywaniePlikuProfile(log, pass);
+
+                foreach (User use in profileList)
+                {
+                    if (use.login == log && use.haslo == pass)
+                    {
+                        this.imie = use.imie;
+                        this.nazwisko = use.nazwisko;
+                        this.waga = use.waga;
+                        this.wzrost = use.wzrost;
+                        this.dataUr = use.dataUr;
+                        this.aktywnosc = use.aktywnosc;
+                        this.login = use.login;
+                        this.haslo = use.haslo;
+                    }
+                }
                 
             }
             catch (FormatException)
@@ -366,26 +385,44 @@ namespace ProjektKCK
             Console.SetCursorPosition(13, 23);
             Console.WriteLine("_______________________________", Color.DarkCyan);
 
-            Console.SetCursorPosition(20, 17);
-            Console.Write("Edytuj imie: ");
-            this.imie = Console.ReadLine();
-            Console.SetCursorPosition(20, 18);
-            Console.Write("Edytuj nazwisko: ");
-            this.nazwisko = Console.ReadLine();
-            Console.SetCursorPosition(20, 19);
-            Console.Write("Edytuj datę urodzenia: ");
-            this.dataUr = Console.ReadLine();
-            Console.SetCursorPosition(20, 20);
-            Console.Write("Edytuj waga: ");
-            this.waga = Console.ReadLine();
-            Console.SetCursorPosition(20, 21);
-            Console.Write("Edytuj wzrost: ");
-            this.wzrost = Console.ReadLine();
-            Console.SetCursorPosition(20, 22);
-            Console.Write("Edytuj aktywność: ");
-            this.aktywnosc = Console.ReadLine();
 
+            foreach(User use in profileList)
+            {
+                if(use.login == login && use.haslo == haslo)
+                {
+                    Console.SetCursorPosition(20, 17);
+                    Console.Write("Edytuj imie: ");
+                    this.imie = Console.ReadLine();
+                    use.imie = imie;
 
+                    Console.SetCursorPosition(20, 18);
+                    Console.Write("Edytuj nazwisko: ");
+                    this.nazwisko = Console.ReadLine();
+                    use.nazwisko = nazwisko;
+
+                    Console.SetCursorPosition(20, 19);
+                    Console.Write("Edytuj datę urodzenia: ");
+                    this.dataUr = Console.ReadLine();
+                    use.dataUr = dataUr;
+
+                    Console.SetCursorPosition(20, 20);
+                    Console.Write("Edytuj waga: ");
+                    this.waga = Console.ReadLine();
+                    use.waga = waga;
+
+                    Console.SetCursorPosition(20, 21);
+                    Console.Write("Edytuj wzrost: ");
+                    this.wzrost = Console.ReadLine();
+                    use.wzrost = wzrost;
+
+                    Console.SetCursorPosition(20, 22);
+                    Console.Write("Edytuj aktywność: ");
+                    this.aktywnosc = Console.ReadLine();
+                    use.aktywnosc = aktywnosc;
+                }
+            }
+
+            zapiszListe();
             Console.SetCursorPosition(20, 25);
             Console.WriteLine("Zaktualizowałeś dane");
             Console.SetCursorPosition(20, 26);
@@ -396,18 +433,25 @@ namespace ProjektKCK
         public void edytujWage()
         {
             string wag = this.waga;
-            Console.CursorVisible = false;
-            Console.SetCursorPosition(25, 3);
-            Console.WriteLine("_______________________________", Color.DarkCyan);
-            Console.SetCursorPosition(25, 7);
-            Console.WriteLine("_______________________________", Color.DarkCyan);
+            foreach (User use in profileList)
+            {
+                if (use.login == login && use.haslo == haslo)
+                {
+                    Console.CursorVisible = false;
+                    Console.SetCursorPosition(25, 3);
+                    Console.WriteLine("_______________________________", Color.DarkCyan);
+                    Console.SetCursorPosition(25, 7);
+                    Console.WriteLine("_______________________________", Color.DarkCyan);
 
-            Console.SetCursorPosition(25, 5);
-            Console.WriteLine("Wpisz nową wagę:   kg");
-            Console.SetCursorPosition(42, 5);
-            this.waga = Console.ReadLine();
+                    Console.SetCursorPosition(25, 5);
+                    Console.WriteLine("Wpisz nową wagę:   kg");
+                    Console.SetCursorPosition(42, 5);
+                    this.waga = Console.ReadLine();
+                    use.waga = waga;
+                }
+            }
 
-
+            zapiszListe();
             Console.SetCursorPosition(25, 6);
             Console.WriteLine("Zaktualizowałeś wagę z " + wag + " na " + this.waga);
             Console.SetCursorPosition(25, 9);
@@ -430,19 +474,27 @@ namespace ProjektKCK
 
         public void edytujLoginHaslo()
         {
-            Console.SetCursorPosition(13, 15);
-            Console.WriteLine("________________________", Color.DarkCyan);
-            Console.SetCursorPosition(13, 19);
-            Console.WriteLine("________________________", Color.DarkCyan);
+            foreach (User use in profileList)
+            {
+                if (use.login == login && use.haslo == haslo)
+                {
+                    Console.SetCursorPosition(13, 15);
+                    Console.WriteLine("________________________", Color.DarkCyan);
+                    Console.SetCursorPosition(13, 19);
+                    Console.WriteLine("________________________", Color.DarkCyan);
 
-            Console.SetCursorPosition(17, 17);
-            Console.Write("Edytuj login: ");
-            this.login = Console.ReadLine();
-            Console.SetCursorPosition(17, 18);
-            Console.Write("Edytuj haslo: ");
-            this.haslo = Console.ReadLine();
+                    Console.SetCursorPosition(17, 17);
+                    Console.Write("Edytuj login: ");
+                    this.login = Console.ReadLine();
+                    use.login = login;
+                    Console.SetCursorPosition(17, 18);
+                    Console.Write("Edytuj haslo: ");
+                    this.haslo = Console.ReadLine();
+                    use.haslo = haslo;
+                }
+            }
 
-
+            zapiszListe();
             Console.SetCursorPosition(17, 21);
             Console.WriteLine("Zaktualizowałeś dane");
             Console.SetCursorPosition(17, 22);

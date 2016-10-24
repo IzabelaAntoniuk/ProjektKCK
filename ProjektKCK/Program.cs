@@ -14,7 +14,7 @@ namespace ProjektKCK
     public class Program
     {
         //public File file;
-        public List<User> glownyProfile = new List<User>();
+        static List<User> glownyProfile = new List<User>();
         //public User us;
 
         static int Menu(string[] inArray, int selectedItem)//bottomOffset)
@@ -99,7 +99,6 @@ namespace ProjektKCK
             Console.CursorVisible = true;
             return selectedItem;
         }
-
 
         static void Animation()
         {
@@ -209,17 +208,13 @@ namespace ProjektKCK
             Console.Title = "Projekt KCK";
             Console.WriteLine();
             Console.WriteLine("Proczę czekać, trwa ładowanie...");
-           // Animation();
-            
-            
+            // Animation();
 
             string[] tabMenuGlowne = wypelnijMenuGlowne();
             string[] tabMenuProfil = wypelnijProfil();
 
-            User us = new ProjektKCK.User();
-            //File file = new File();
-
-            
+            User us = new User();
+            us.uzupelnijListe();
 
             while (true)
             {
@@ -308,10 +303,8 @@ namespace ProjektKCK
                     case 1:
                         Console.Clear();
                         us.zarejestrujProfil();
-                        // file.zapisywaniePlikuProfile(glownyProfile);
                         break;
                     case 2:
-                        // file.wczytywaniePlikuProfile();
                         return;
                 }
             }
