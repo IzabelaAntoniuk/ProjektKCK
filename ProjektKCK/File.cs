@@ -5,13 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace ProjektKCK
 {
     public class File
     {
-        List<User> profile = new List<User>();
+        List<User> profile;
 
         public File()
         {
@@ -19,18 +18,26 @@ namespace ProjektKCK
 
         public List<User> listaProfili()
         {
-            using (StreamReader loadFileUser = new StreamReader("Profile.txt"))
+            try
             {
-                string line;
-                while ((line = loadFileUser.ReadLine()) != null)
+                profile = new List<User>();
+                using (StreamReader loadFileUser = new StreamReader("Profile.txt"))
                 {
-                    User us = JsonConvert.DeserializeObject<User>(line);
-                    profile.Add(us);
+                    string line;
+                    while ((line = loadFileUser.ReadLine()) != null)
+                    {
+                        User us = JsonConvert.DeserializeObject<User>(line);
+                        profile.Add(us);
+                    }
+                    loadFileUser.Close();
                 }
-                loadFileUser.Close();
-                Console.SetCursorPosition(0, 20);
-                
             }
+            catch (System.IO.FileNotFoundException)
+            {
+                profile = new List<User>();
+            }
+            Console.SetCursorPosition(0, 20);
+
             foreach (User us in profile)
             {
                 Console.WriteLine(us.imie);
@@ -59,12 +66,6 @@ namespace ProjektKCK
                         us.aktywnosc = load.aktywnosc;
                         us.login = load.login;
                         us.haslo = load.haslo;
-                        us.plec = load.plec;
-                        us.wiek = load.wiek;
-                        us.BMI = load.BMI;
-                        us.kg = load.kg;
-                        us.CPM = load.CPM;
-                        us.newCPM = load.newCPM;
                         break;
                     }
                 }
